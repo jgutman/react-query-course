@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import {GoIssueOpened, GoIssueClosed, GoComment} from "react-icons/go";
+import { GoIssueOpened, GoIssueClosed, GoComment } from "react-icons/go";
 import { relativeDate } from "../helpers/relativeDate";
 import { defaultLabels, defaultUsers } from "../helpers/defaultData";
 

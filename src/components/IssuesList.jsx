@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { IssueItem } from "./IssueItem";
+import IssueItem from "./IssueItem";
 
 export default function IssuesList() {
   const { data: issues, isLoading } = useQuery(
