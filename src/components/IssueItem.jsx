@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { GoIssueOpened, GoIssueClosed, GoComment } from "react-icons/go";
 import { relativeDate } from "../helpers/relativeDate";
-import { defaultLabels } from "../helpers/defaultData";
 import { useUserData } from "../helpers/useUserData";
+import { useLabelsData } from "../helpers/useLabelData";
 
 export default function IssueItem({ 
     title, number, assignee, commentCount, createdBy, createdDate, labels, status 
@@ -13,6 +13,8 @@ export default function IssueItem({
     let assigneeUser;
     if (assignee)
         assigneeUser = useUserData(assignee);
+    
+    const allLabels = useLabelsData();
 
     return (
       <li>
@@ -24,10 +26,15 @@ export default function IssueItem({
         <div className="issue-content">
           <span>
             <Link to={`/issue/${number}`}>{title}</Link>
-            {labels.map((label) => {
-              const labelData = defaultLabels.find((l) => l.name === label);
-              return <span key={label} className={`label ${labelData?.color || "white"}`}>{label}</span>
-            })}
+            {allLabels.isSuccess ?
+             labels.map((label) => {
+              const issueLabel = allLabels.data.find((l) => l.id === label);
+              return (
+                <span key={issueLabel.id} className={`label ${issueLabel.color}`}>
+                    {issueLabel.name}
+                </span>
+              )
+            }) : null}
           </span>
           <small>#{number} opened {relativeDate(createdDate)} 
             { createdByUser.isSuccess ? 

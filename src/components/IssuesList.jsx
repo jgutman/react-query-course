@@ -6,9 +6,6 @@ export default function IssuesList() {
     ["issues"], 
     () => fetch("/api/issues").then((res) => res.json())
   );
-  
-  if (!isLoading)
-    console.log(issues);
 
   return (
     <div>
