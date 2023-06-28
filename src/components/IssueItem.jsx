@@ -8,8 +8,11 @@ export default function IssueItem({
     title, number, assignee, commentCount, createdBy, createdDate, labels, status 
   }) {
 
+    // Every issue must have a createdBy user, but not every issue has an assignee
     const createdByUser = useUserData(createdBy);
-    const assigneeUser = useUserData(assignee);
+    let assigneeUser;
+    if (assignee)
+        assigneeUser = useUserData(assignee);
 
     return (
       <li>
