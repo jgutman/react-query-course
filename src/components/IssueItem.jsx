@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { GoIssueOpened, GoIssueClosed, GoComment } from "react-icons/go";
 import { relativeDate } from "../helpers/relativeDate";
-import { defaultLabels, defaultUsers } from "../helpers/defaultData";
+import { defaultLabels } from "../helpers/defaultData";
+import { useUserData } from "../helpers/useUserData";
 
 export default function IssueItem({ 
     title, number, assignee, commentCount, createdBy, createdDate, labels, status 
   }) {
-    const createdByUser = defaultUsers.find((user) => user.id === createdBy);
-    const assigneeUser = defaultUsers.find((user) => user.id === assignee);
+
+    const createdByUser = useUserData(createdBy);
+    const assigneeUser = useUserData(assignee);
 
     return (
       <li>
@@ -24,13 +26,19 @@ export default function IssueItem({
               return <span key={label} className={`label ${labelData?.color || "white"}`}>{label}</span>
             })}
           </span>
-          <small>#{number} opened {relativeDate(createdDate)} by {createdByUser?.name}</small>
+          <small>#{number} opened {relativeDate(createdDate)} 
+            { createdByUser.isSuccess ? 
+                ` by ${createdByUser.data.name}` :
+                null 
+            }
+          </small>
         </div>
-        {assigneeUser ? 
-          <div>
-            <img className="assigned-to" src={assigneeUser.profilePictureUrl} alt={assigneeUser.name} />
-          </div>
-        : null
+        { assignee && assigneeUser.isSuccess ? // check that issue has an assignee and that the user data is available  
+            <img className="assigned-to" 
+                 src={assigneeUser.data.profilePictureUrl} 
+                 alt={`Assigned to ${assigneeUser.data.name}`} 
+            /> :
+            null
         }
         {commentCount > 0 ?
           <span className="comment-count">
