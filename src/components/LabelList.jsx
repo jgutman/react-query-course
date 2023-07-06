@@ -1,18 +1,17 @@
 import { useLabelsData } from "../helpers/useLabelData";
 
 export default function LabelList({ selected, toggle }) {
-  const allLabels = useLabelsData();
+  const { data: allLabels, isLoading } = useLabelsData();
 
   const Label = ({ label }) => {
-    const handleClick = () => {
-      console.log(`${label.name} clicked`);
-      toggle(label.id);
-    };
     const isSelectedString = selected.includes(label.id) ? "selected" : "";
 
     return (
       <li>
-        <button className={`${label.color} ${isSelectedString}`} onClick={handleClick}>
+        <button 
+          className={`${label.color} ${isSelectedString}`} 
+          onClick={() => toggle(label.id)}
+        >
           {label.name}
         </button>
       </li>
@@ -23,15 +22,15 @@ export default function LabelList({ selected, toggle }) {
     <div className="labels">
       <h3>Labels</h3>
       {
-        allLabels.isSuccess ?
+        isLoading ?
+        <p>Loading...</p> :
         <ul>
           {
-            allLabels.data.map((label) => (
+            allLabels.map((label) => (
               <Label key={label.id} label={label}/>
             ))
           }
-        </ul> :
-        <p>Loading...</p>
+        </ul>
       }
     </div>
   );

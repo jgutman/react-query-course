@@ -6,10 +6,11 @@ export default function IssuesList({ selected }) {
     ["issues"], 
     () => fetch("/api/issues").then((res) => res.json())
   );
-  console.log(`Filtering issues by labels: ${selected}`);
+  
   let filteredIssues = issues;
 
   if (issues && selected.length > 0) {
+    console.log(`Filtering issues by labels: ${selected}`);
     filteredIssues = issues.filter((issue) => {
       return selected.some((label) => issue.labels.includes(label));
     });
