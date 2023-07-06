@@ -12,7 +12,8 @@ export default function Issues() {
         return prev.filter((id) => id !== label);
       // otherwise, select it by adding to the list
       } else {
-        return [...prev, label];
+        // We can eliminate some unnecessary re-queries by sorting the labels
+        return [...prev, label].toSorted();
       }
     });
   }
