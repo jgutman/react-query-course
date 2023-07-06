@@ -1,10 +1,23 @@
 import { useLabelsData } from "../helpers/useLabelData";
 
-export default function LabelList() {
+export default function LabelList({ selected, toggle }) {
   const allLabels = useLabelsData();
 
-  if (allLabels.isSuccess)
-    console.log(allLabels.data);
+  const Label = ({ label }) => {
+    const handleClick = () => {
+      console.log(`${label.name} clicked`);
+      toggle(label.id);
+    };
+    const isSelectedString = selected.includes(label.id) ? "selected" : "";
+
+    return (
+      <li>
+        <button className={`${label.color} ${isSelectedString}`} onClick={handleClick}>
+          {label.name}
+        </button>
+      </li>
+    );
+  }
 
   return (
     <div className="labels">
@@ -14,15 +27,11 @@ export default function LabelList() {
         <ul>
           {
             allLabels.data.map((label) => (
-              <li key={label.id}>
-                <button class={label.color}>
-                  {label.name}
-                </button>
-              </li>
+              <Label key={label.id} label={label}/>
             ))
           }
         </ul> :
-        null
+        <p>Loading...</p>
       }
     </div>
   );

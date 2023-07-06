@@ -13,8 +13,22 @@ export default function IssueItem({
     let assigneeUser;
     if (assignee)
         assigneeUser = useUserData(assignee);
-    
-    const allLabels = useLabelsData();
+
+    const Label = ({ labelId }) => {
+        const labelsQuery = useLabelsData();
+        
+        if (labelsQuery.isLoading) 
+            return null;
+        const label = labelsQuery.data.find((l) => l.id === labelId);
+        if (!label)
+            return null;
+
+        return (
+            <span className={`label ${label.color}`}>
+                {label.name}
+            </span>
+        )
+    }
 
     return (
       <li>
@@ -26,15 +40,11 @@ export default function IssueItem({
         <div className="issue-content">
           <span>
             <Link to={`/issue/${number}`}>{title}</Link>
-            {allLabels.isSuccess ?
-             labels.map((label) => {
-              const issueLabel = allLabels.data.find((l) => l.id === label);
-              return (
-                <span key={issueLabel.id} className={`label ${issueLabel.color}`}>
-                    {issueLabel.name}
-                </span>
-              )
-            }) : null}
+            {
+                labels.map((label) => (
+                    <Label key={label} labelId={label} />
+                ))
+            }
           </span>
           <small>#{number} opened {relativeDate(createdDate)} 
             { createdByUser.isSuccess ? 
