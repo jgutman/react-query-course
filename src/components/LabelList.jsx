@@ -4,12 +4,13 @@ export default function LabelList({ selected, toggle }) {
   
   const Label = ({ label }) => {
     const isSelectedString = selected.includes(label.id) ? "selected" : "";
-
+    
+    // The issues query API appears to expect the label name, not the label id
     return (
       <li>
         <button 
           className={`${label.color} ${isSelectedString}`} 
-          onClick={() => toggle(label.id)}
+          onClick={() => toggle(label.name)}
         >
           {label.name}
         </button>

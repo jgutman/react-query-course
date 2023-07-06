@@ -5,14 +5,14 @@ import { useState } from "react";
 export default function Issues() {
   const [selectedLabels, setSelectedLabels] = useState([]);
 
-  const toggleLabel = (labelId) => { 
+  const toggleLabel = (label) => { 
     setSelectedLabels((prev) => {
       // if already selected, unselect it by removing from list
-      if (prev.includes(labelId)) {
-        return prev.filter((id) => id !== labelId);
+      if (prev.includes(label)) {
+        return prev.filter((id) => id !== label);
       // otherwise, select it by adding to the list
       } else {
-        return [...prev, labelId];
+        return [...prev, label];
       }
     });
   }
