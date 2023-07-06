@@ -2,19 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import IssueItem from "./IssueItem";
 
 export default function IssuesList({ selected }) {
-  const { data: issues, isLoading } = useQuery(
-    ["issues"], 
-    () => fetch("/api/issues").then((res) => res.json())
+  const { data: filteredIssues, isLoading } = useQuery(
+    ["issues", { selected }], 
+    () => {
+      // Instead of querying for all issues, we can query for only the issues that have the selected labels
+      // Then we don't have to filter out the returned results
+      const queryString = selected.map((label) => `labels[]=${label}`).join("&");
+      return fetch(`/api/issues?${queryString}`).then((res) => res.json())
+    }
   );
-  
-  let filteredIssues = issues;
-
-  if (issues && selected.length > 0) {
-    console.log(`Filtering issues by labels: ${selected}`);
-    filteredIssues = issues.filter((issue) => {
-      return selected.some((label) => issue.labels.includes(label));
-    });
-  }
 
   return (
     <div>

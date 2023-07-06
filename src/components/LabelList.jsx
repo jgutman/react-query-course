@@ -1,8 +1,7 @@
 import { useLabelsData } from "../helpers/useLabelData";
 
 export default function LabelList({ selected, toggle }) {
-  const { data: allLabels, isLoading } = useLabelsData();
-
+  
   const Label = ({ label }) => {
     const isSelectedString = selected.includes(label.id) ? "selected" : "";
 
@@ -17,6 +16,8 @@ export default function LabelList({ selected, toggle }) {
       </li>
     );
   }
+
+  const { data: allLabels, isLoading } = useLabelsData();
 
   return (
     <div className="labels">
