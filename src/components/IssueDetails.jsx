@@ -35,7 +35,7 @@ export default function IssueDetails() {
             <CommentList comments={comments} />
         }
         <aside>
-          Sidebar: Set issue options here
+          Sidebar: TODO
         </aside>
       </main>
     </div>

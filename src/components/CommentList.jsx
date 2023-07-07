@@ -3,8 +3,8 @@ import { relativeDate } from "../helpers/relativeDate";
 
 export default function CommentList({comments}) {
 
-    const Comment = ({ comment }) => {
-        const {data: commenter, isSuccess: commenterIsSuccess} = useUserData(comment.createdBy);
+    const Comment = ({ createdBy, createdDate, comment }) => {
+        const {data: commenter, isSuccess: commenterIsSuccess} = useUserData(createdBy);
 
         return (
           <div className="comment">
@@ -17,15 +17,14 @@ export default function CommentList({comments}) {
             <div>
                 <div className="comment-header">
                     <span>
-                        {commenterIsSuccess ? commenter?.name || "Unknown" : ""}
+                        {commenterIsSuccess ? commenter.name : ""}
                     </span>
-                    {" "} commented {relativeDate(comment.createdDate)}
+                    {" "} commented {relativeDate(createdDate)}
                 </div>
                 <div className="comment-body">
-                    {comment.comment}
+                    {comment}
                 </div>
             </div>
-            
           </div>
         );
     }
@@ -34,7 +33,7 @@ export default function CommentList({comments}) {
         <section>
             {
                 comments.map((comment) => (
-                    <Comment key={comment.id} comment={comment} />
+                    <Comment key={comment.id} {...comment} />
                 ))
             }
         </section>
