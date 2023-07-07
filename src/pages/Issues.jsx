@@ -3,10 +3,12 @@ import { useState } from "react";
 import IssuesList from "../components/IssuesList";
 import LabelList from "../components/LabelList";
 import StatusList from "../components/StatusList";
+import SearchBar from "../components/SearchBar";
 
 export default function Issues() {
   const [selectedLabels, setSelectedLabels] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const toggleLabel = (label) => { 
     setSelectedLabels((prev) => {
@@ -25,7 +27,8 @@ export default function Issues() {
     <div>
       <main>
         <section>
-          <IssuesList labels={selectedLabels} status={selectedStatus}/>
+          <SearchBar changeSearch={setSearchTerm}/>
+          <IssuesList search={searchTerm} labels={selectedLabels} status={selectedStatus}/>
         </section>
         <aside>
           <LabelList 
