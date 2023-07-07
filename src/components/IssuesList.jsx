@@ -3,7 +3,7 @@ import IssueItem from "./IssueItem";
 
 export default function IssuesList({ search, labels, status }) {
   const { data: filteredIssues, isLoading } = useQuery(
-    ["issues", { search, labels, status }], 
+    ["issues", { labels, status }], 
     () => {
       // Instead of querying for all issues, we can query for only the issues that have 
       // the selected labels and the selected status
@@ -17,6 +17,7 @@ export default function IssuesList({ search, labels, status }) {
 
   const { data: searchedIssues, isLoading: isSearching } = useQuery(
     ["issues", "search", { search }],
+    // note that the search API is case-sensitive for some reason
     () => fetch(`/api/search/issues?q=${search}`).then((res) => res.json()),
     { enabled: !!search }
   )
