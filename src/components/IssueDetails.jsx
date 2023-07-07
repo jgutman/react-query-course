@@ -1,31 +1,43 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import IssueHeader from "./IssueHeader";
+import CommentList from "./CommentList";
 
 function useIssueData(number) {
   return useQuery(
     ["issues", number ], 
-    () => {
-      // Instead of querying for all issues, we can query for only the issues that have 
-      // the selected labels and the selected status
-      // That way we don't have to filter out the returned results
-      return fetch(`/api/issues/${number}`).then((res) => res.json())
-    }
+    () => fetch(`/api/issues/${number}`).then((res) => res.json())
+  );
+}
+
+function useCommentData(number) {
+  return useQuery(
+    ["issues", number, "comments" ], 
+    () => fetch(`/api/issues/${number}/comments`).then((res) => res.json())
   );
 }
 
 export default function IssueDetails() {
   const { number } = useParams();
-  const { data: issue, isLoading } = useIssueData(number);
+  const { data: issue, isLoading: isIssueLoading } = useIssueData(number);
+  const { data: comments, isLoading: isCommentsLoading } = useCommentData(number);
 
-  if (isLoading)
+  if (isIssueLoading)
     return <p>Loading...</p>;
-
-  console.log(issue);
 
   return (
     <div className="issue-details">
-      <IssueHeader {...issue} commentCount={ issue.comments.length } />
+      <IssueHeader {...issue} commentCount={ issue.comments?.length || 0 } />
+      <main>
+        {
+          isCommentsLoading ?
+            <p>Loading comments...</p> :
+            <CommentList comments={comments} />
+        }
+        <aside>
+          Sidebar: Set issue options here
+        </aside>
+      </main>
     </div>
   );
 }

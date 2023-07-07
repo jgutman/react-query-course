@@ -7,7 +7,8 @@ export default function IssueHeader({
         title, number, status, createdBy, createdDate, commentCount 
     }) {
     const isDone = status == "done" || status == "cancelled";
-    const statusLabel = possibleStatus.find((statusObj) => statusObj.id === status).label;
+    // Some issues are missing statuses, we'll consider those as "Todo"
+    const statusLabel = possibleStatus.find((statusObj) => statusObj.id === status)?.label || "Todo";
     const createdByUser = useUserData(createdBy);
 
     return (
